@@ -1,0 +1,51 @@
+
+[global_tags]
+  # dc = "us-east-1" # will tag all metrics with dc=us-east-1
+  # rack = "1a"
+  ## Environment variables can be used as tags, and throughout the config file
+  # user = "$USER"
+
+[agent]
+  interval = "{{ telegraf_interval }}"
+  round_interval = {{ telegraf_round_interval }}
+  metric_batch_size = 1000
+  metric_buffer_limit = 10000
+  collection_jitter = "0s"
+  flush_interval = "10s"
+  flush_jitter = "0s"
+  precision = ""
+  # debug = false
+  # quiet = false
+  # logtarget = "file"
+  # logfile = ""
+  # logfile_rotation_interval = "0d"
+  # logfile_rotation_max_size = "0MB"
+  # logfile_rotation_max_archives = 5
+  # log_with_timezone = ""
+  hostname = ""
+  omit_hostname = false
+
+[[outputs.influxdb_v2]]
+  urls = ["{{ influxdb_v2_url }}"]
+  token = "{{ telegraf_influxdb_token }}"
+  organization = "{{ telegraf_influxdb_org }}"
+  bucket = "{{ telegraf_influxdb_bucket }}"
+
+[[inputs.disk]]
+  ## Set mount_points will restrict the stats to only the specified mount points.
+  # mount_points = ["/"]
+  ignore_fs = ["tmpfs", "devtmpfs", "devfs", "iso9660", "overlay", "aufs", "squashfs"]
+
+[[inputs.diskio]]
+
+[[inputs.mem]]
+
+[[inputs.net]]
+
+[[inputs.processes]]
+
+[[inputs.swap]]
+
+[[inputs.system]]
+
+[[inputs.temp]]

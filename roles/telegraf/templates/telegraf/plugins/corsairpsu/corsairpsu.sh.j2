@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+sensors -j | jq '. | with_entries(select(.key | test("corsairpsu"))) | .[]'
+
+
+{# RAW=$(sensors -j corsairpsu-hid-3-3 | jq '."corsairpsu-hid-3-3"')
+
+echo "$RAW" | jq '."case temp"."temp2_input"'
+
+# InfluxDB output
+# echo "power_supply temp_0=$temp_0,temp_1=$temp_1,total_time=$powered,uptime+$uptime,supply_volts=$supply,total_watts$total_watts,12v_volts=$volts_12v,12v_amps=$amps_12v,12v_watts=$watts_12v,5v_volts=$volts_5v,5v_amps=$amps_5v,5v_watts=$watts_5v,3.3v_volts=$volts_3_3v,3.3v_amps=$amps_3_3v,3.3v_watts=$watts_3_3v $(date '+%s%N')" #}

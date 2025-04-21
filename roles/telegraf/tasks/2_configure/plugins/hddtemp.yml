@@ -1,0 +1,13 @@
+---
+- name: Configure hddtemp plugin for telegraf
+  tags: [telegraf-plugins-hddtemp]
+  block:
+    - name: Install plugin config
+      ansible.builtin.template:
+        src: telegraf/plugins/hddtemp.conf.j2
+        dest: /etc/telegraf/telegraf.d/hddtemp.conf
+        owner: root
+        group: root
+        mode: "0644"
+      notify:
+        - Restart telegraf service

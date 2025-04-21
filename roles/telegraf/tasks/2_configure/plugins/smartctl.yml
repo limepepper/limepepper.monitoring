@@ -1,0 +1,23 @@
+---
+- name: Configure smartctl plugin
+  tags: telegraf-plugins-smart
+  block:
+    - name: Create sudoers config for running smartctl
+      ansible.builtin.template:
+        src: telegraf/plugins/smart/sudoers.j2
+        dest: /etc/sudoers.d/11-telegraf-smart
+        mode: "0440"
+        owner: root
+        group: root
+      notify:
+        - Restart telegraf service
+
+    - name: Install plugin config
+      ansible.builtin.template:
+        src: telegraf/plugins/smartctl/smartctl.conf.j2
+        dest: /etc/telegraf/telegraf.d/smartctl.conf
+        owner: root
+        group: root
+        mode: "0644"
+      notify:
+        - Restart telegraf service

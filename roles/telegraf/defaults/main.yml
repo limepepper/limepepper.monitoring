@@ -1,0 +1,32 @@
+---
+
+telegraf_dir: /opt/telegraf # noqa var-naming[no-role-prefix]
+influxdb_dir: /opt/influxdb # noqa var-naming[no-role-prefix]
+
+influxdb_host: localhost # noqa var-naming[no-role-prefix]
+influxdb_port: 8086 # noqa var-naming[no-role-prefix]
+influxdb_url: http://{{ influxdb_host }}:{{ influxdb_port }} # noqa var-naming[no-role-prefix]
+influxdb_v2_url: http://{{ influxdb_host }}:{{ influxdb_port }} # noqa var-naming[no-role-prefix]
+
+telegraf_influxdb_org: main
+telegraf_influxdb_bucket: telegraf
+
+telegraf_interval: 60s
+telegraf_round_interval: "true"
+
+telegraf_plugins: []
+telegraf_packages:
+  - influxdb2-cli
+  - telegraf
+
+telegraf_mqtt_broker: localhost
+telegraf_mqtt_port: "1883"
+
+telegraf_apcupsd_host: localhost
+telegraf_apcupsd_port: "3551"
+telegraf_apcupsd_timeout: 5s
+
+telegraf_audio_level_sample_trim: 1
+telegraf_audio_level_sample_rate: 48000
+telegraf_audio_level_sample_size: 16
+telegraf_audio_level_sample_channels: 1

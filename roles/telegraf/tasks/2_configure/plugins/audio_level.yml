@@ -1,0 +1,29 @@
+---
+- name: Install Audio level plugin
+  tags: [telegraf-plugins-audio-level]
+  notify:
+    - Restart telegraf service
+  block:
+    - name: Create sudoers config for running sox
+      ansible.builtin.template:
+        src: telegraf/plugins/audio_level/sudoers.j2
+        dest: /etc/sudoers.d/12-telegraf-audio-level
+        mode: "0440"
+        owner: root
+        group: root
+
+    - name: Copy file with owner and permissions
+      ansible.builtin.template:
+        src: telegraf/plugins/audio_level/audio_level.sh.j2
+        dest: /usr/local/bin/audio_level-telegraf.sh
+        owner: root
+        group: root
+        mode: "0755"
+
+    - name: Install plugin config
+      ansible.builtin.template:
+        src: telegraf/plugins/audio_level/audio_level.conf.j2
+        dest: /etc/telegraf/telegraf.d/audio_level.conf
+        owner: root
+        group: root
+        mode: "0644"

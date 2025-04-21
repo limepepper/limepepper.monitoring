@@ -1,0 +1,41 @@
+---
+- name: Install Telegraf
+  tags: telegraf
+  block:
+    - name: Collect facts required for telegraf
+      tags: always
+      when: >
+        ansible_distribution is not defined or
+        ansible_default_ipv4 is not defined
+      ansible.builtin.setup:
+        gather_subset:
+          - min
+          - network
+
+    - name: Show information for this installation
+      ansible.builtin.debug:
+        msg: |2
+
+          ## installing telegraf - ansible role
+          #   _       _                       __
+          #  | |_ ___| | ___  __ _ _ __ __ _ / _|
+          #  | __/ _ \ |/ _ \/ _` | '__/ _` | |_
+          #  | ||  __/ |  __/ (_| | | | (_| |  _|
+          #   \__\___|_|\___|\__, |_|  \__,_|_|
+          #                  |___/
+          ## Running LimePepper Telegraf role
+
+    - name: Install telegraf package
+      tags: always
+      ansible.builtin.include_tasks: 1_install/main.yml
+
+    - name: Configure telegraf
+      tags: always
+      ansible.builtin.include_tasks: 2_configure/main.yml
+
+    - name: Start telegraf service
+      tags: always
+      ansible.builtin.include_tasks: 3_service/main.yml
+
+    - name: Flush handlers
+      ansible.builtin.meta: flush_handlers

@@ -1,0 +1,13 @@
+---
+- name: Restart telegraf service
+  limepepper.system.service2:
+    name: telegraf
+    # state: try-reload-or-restart
+    state: restarted
+    enabled: true
+  when: >
+    not (
+        telegraf_service_started is defined
+      and
+        telegraf_service_started.changed
+        )

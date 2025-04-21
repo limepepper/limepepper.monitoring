@@ -1,0 +1,21 @@
+---
+- name: Configure battery linux plugin for telegraf
+  tags: [telegraf-plugins-battery-linux]
+  block:
+    - name: Copy file with owner and permissions
+      ansible.builtin.copy:
+        src: plugins/battery_linux/battery_linux
+        dest: /usr/local/bin/battery_linux
+        owner: root
+        group: root
+        mode: "0755"
+
+    - name: Install plugin config
+      ansible.builtin.template:
+        src: telegraf/plugins/battery_linux/battery_linux.conf
+        dest: /etc/telegraf/telegraf.d/battery_linux.conf
+        owner: root
+        group: root
+        mode: "0644"
+      notify:
+        - Restart telegraf service

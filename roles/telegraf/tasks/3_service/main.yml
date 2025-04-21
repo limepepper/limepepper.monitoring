@@ -1,0 +1,11 @@
+---
+- name: Start telegraf service
+  tags: telegraf-service
+  block:
+    - name: Start and enable telegraf service
+      limepepper.system.service2:
+        name: telegraf
+        state: started
+        enabled: true
+      register: telegraf_service_started
+      when: not ansible_check_mode

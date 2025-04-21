@@ -1,0 +1,20 @@
+---
+- name: Configure telegraf
+  tags: telegraf-config
+  block:
+    - name: Install telegraf main config
+      ansible.builtin.template:
+        src: telegraf/config/telegraf.conf.j2
+        dest: /etc/telegraf/telegraf.conf
+        owner: root
+        group: root
+        mode: "0644"
+      notify:
+        - Restart telegraf service
+
+    - name: Configure plugins
+      tags: always
+      ansible.builtin.include_tasks: "{{ role_path }}/tasks/2_configure/plugins/{{ telegraf_plugin_item.name | default(telegraf_plugin_item) }}.yml"
+      loop: "{{ telegraf_plugins }}"
+      loop_control:
+        loop_var: telegraf_plugin_item

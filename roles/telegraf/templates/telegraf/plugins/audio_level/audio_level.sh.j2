@@ -1,0 +1,31 @@
+#!/bin/bash
+
+set -eu -o pipefail
+
+# Find the USB microphone hardware ID
+USB_MIC_CARD=$(arecord -l | grep "USB PnP Sound Device" | head -1 | sed -r 's/card ([0-9]+).*/\1/')
+
+if [ -z "$USB_MIC_CARD" ]; then
+  echo "Error: USB PnP Sound Device not found" >&2
+  exit 1
+fi
+
+# Capture sox stats output
+stats_output=$(sox -t alsa hw:$USB_MIC_CARD,0 -n trim 0 {{ telegraf_audio_level_sample_trim }} stats 2>&1)
+
+# Extract relevant values
+dc_offset=$(echo "$stats_output" | grep "DC offset" | awk '{print $3}')
+min_level=$(echo "$stats_output" | grep "Min level" | awk '{print $3}')
+max_level=$(echo "$stats_output" | grep "Max level" | awk '{print $3}')
+pk_lev_db=$(echo "$stats_output" | grep "Pk lev dB" | awk '{print $4}')
+rms_lev_db=$(echo "$stats_output" | grep "RMS lev dB" | awk '{print $4}')
+rms_pk_db=$(echo "$stats_output" | grep "RMS Pk dB" | awk '{print $4}')
+
+# Current timestamp in nanoseconds for InfluxDB
+timestamp=$(date +%s%N)
+
+{# json_output="{\"measurement\":\"server_noise\",\"tags\":{\"host\":\"$(hostname)\",\"location\":\"proxmox\"},\"fields\":{\"dc_offset\":$dc_offset,\"min_level\":$min_level,\"max_level\":$max_level,\"pk_lev_db\":$pk_lev_db,\"rms_lev_db\":$rms_lev_db,\"rms_pk_db\":$rms_pk_db},\"time\":$timestamp}"
+
+echo "$json_output" #}
+
+echo "server_noise,host=$(hostname),source=microphone dc_offset=$dc_offset,min_level=$min_level,max_level=$max_level,pk_lev_db=$pk_lev_db,rms_lev_db=$rms_lev_db,rms_pk_db=$rms_pk_db ${timestamp}"

@@ -1,0 +1,13 @@
+---
+- name: Configure nvidia plugin
+  tags: [telegraf-plugins-nvidia]
+  block:
+    - name: Install nvidia plugin config
+      ansible.builtin.template:
+        src: telegraf/plugins/nvidia/nvidia.conf
+        dest: /etc/telegraf/telegraf.d/nvidia.conf
+        owner: root
+        group: root
+        mode: "0644"
+      notify:
+        - Restart telegraf service

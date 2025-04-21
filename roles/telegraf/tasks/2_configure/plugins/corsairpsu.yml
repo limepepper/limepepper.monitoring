@@ -1,0 +1,23 @@
+---
+- name: Install script and config for corsair link
+  tags: [telegraf-plugins-corsairpsu]
+  block:
+    - name: Copy file with owner and permissions
+      ansible.builtin.template:
+        src: telegraf/plugins/corsairpsu/corsairpsu.sh.j2
+        dest: /usr/local/bin/corsairpsu-telegraf.sh
+        owner: root
+        group: root
+        mode: "0755"
+      notify:
+        - Restart telegraf service
+
+    - name: Install plugin config
+      ansible.builtin.template:
+        src: telegraf/plugins/corsairpsu/corsairpsu.conf.j2
+        dest: /etc/telegraf/telegraf.d/corsairpsu.conf
+        owner: root
+        group: root
+        mode: "0644"
+      notify:
+        - Restart telegraf service

@@ -1,0 +1,15 @@
+---
+- name: Install Telegraf on RedHat Linux
+  tags: telegraf-install-fedora
+  block:
+    - name: Create influxdb install dir
+      ansible.builtin.file:
+        path: "{{ influxdb_dir }}"
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+
+    - name: Install telegraf packages
+      ansible.builtin.package:
+        name: "{{ telegraf_packages }}"
