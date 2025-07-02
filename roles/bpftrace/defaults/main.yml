@@ -1,0 +1,7 @@
+---
+
+bpftrace_repo_packages: []
+
+bpftrace_packages:
+  - bpftrace
+  - bpftool

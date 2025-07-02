@@ -1,0 +1,30 @@
+
+// Track child processes created via fork/clone
+// tracepoint:syscalls:sys_enter_fork,
+// tracepoint:syscalls:sys_enter_clone,
+// tracepoint:syscalls:sys_enter_vfork
+// /comm == "childfork"/
+// {
+//     @parent_pid[tid] = pid;
+// }
+
+// tracepoint:syscalls:sys_exit_fork,
+// tracepoint:syscalls:sys_exit_clone
+// /@parent_pid[tid]/
+// {
+//     $child_pid = args->ret;
+//     $parent_pid = @parent_pid[tid];
+
+//     printf("Parent PID: %d forked Child PID: %d\n", $parent_pid, $child_pid);
+
+//     // // Send SIGSTOP to the child to pause it before it does more
+//     // system("/bin/kill -SIGSTOP %d", $child_pid);
+
+//     // Attach gdbserver to the child
+//     system("/usr/bin/gdb --batch -p %d -x defork1.gdb -ex continue &", $child_pid);
+
+//     // we can also send a signal to the child if needed
+//     system("/bin/kill -SIGCONT %d", $child_pid);
+
+//     delete(@parent_pid[tid]);
+// }

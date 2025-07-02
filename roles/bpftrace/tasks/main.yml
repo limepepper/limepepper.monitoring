@@ -1,0 +1,32 @@
+---
+- name: Install and configure bpftrace
+  tags: bpftrace
+  block:
+    - name: Collect minimal facts if not already
+      tags: always
+      when: >
+        ansible_distribution is not defined or
+        ansible_default_ipv4 is not defined
+      ansible.builtin.setup:
+        gather_subset:
+          - min
+          - network
+
+#    - name: Load distro specific vars
+#      tags: always
+#      ansible.builtin.include_tasks: vars.yml
+
+    - name: Install any relevant packages
+      tags: always
+      ansible.builtin.include_tasks: 1_install/main.yml
+
+    - name: Process config files based on host facts
+      tags: always
+      ansible.builtin.include_tasks: 2_configure/main.yml
+
+    - name: Configure as a service
+      tags: always
+      ansible.builtin.include_tasks: 3_service/main.yml
+
+    - name: Flush handlers
+      ansible.builtin.meta: flush_handlers

@@ -1,0 +1,11 @@
+---
+- name: Install bpftrace on linux
+  tags: bpftrace-install-linux
+  block:
+    - name: Setup any 3rd party repos for chrony
+      ansible.builtin.package:
+        name: "{{ bpftrace_repo_packages }}"
+
+    - name: General packages for chrony
+      ansible.builtin.package:
+        name: "{{ bpftrace_packages }}"
