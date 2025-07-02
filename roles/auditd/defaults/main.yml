@@ -1,0 +1,35 @@
+---
+
+auditd_service_name: auditd
+# auditd is a special case, use `sudo auditctl --signal stop`
+auditd_service_start: false
+
+auditd_service_manage: true
+
+auditd_repo_packges: []
+auditd_packages: "{{ _auditd_packages | default([]) }}"
+
+# A flat to allow for uninstallation of custom rules. This is useful for ad-hoc monitoring
+auditd_remove_customs: false
+
+_auditd_packages:
+  - audit
+  - audit-rules
+
+auditd_rules_d_dir: /etc/audit/rules.d
+auditd_rules_templates:
+  - 01-ssh
+  - 02-execve
+  - 03-filepaths
+#  - 04-perms
+  - 05-exe-syscalls
+
+# Track execution of binaries
+auditd_rules_execve: []
+
+# Track updates/modifications to filepaths
+auditd_rules_filepaths: []
+
+auditd_rules_exe_syscalls: []
+
+auditd_disable_suppress: true

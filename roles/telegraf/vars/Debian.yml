@@ -1,0 +1,4 @@
+---
+
+_telegraf_sensors_packages:
+  - lm-sensors

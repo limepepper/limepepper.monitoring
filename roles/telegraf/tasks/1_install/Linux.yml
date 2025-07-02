@@ -1,0 +1,23 @@
+---
+- name: Install Telegraf on Linux
+  tags: telegraf-install-linux
+  block:
+#    - name: Create influxdb install dir
+#      ansible.builtin.file:
+#        path: "{{ influxdb_dir }}"
+#        state: directory
+#        owner: root
+#        group: root
+#        mode: "0755"
+
+    - name: Install required repo packages
+      ansible.builtin.include_role:
+        name: limepepper.system.package_installer
+      vars:
+        package_list: "{{ telegraf_repo_packages }}"
+
+    - name: Install bacula client packages
+      ansible.builtin.include_role:
+        name: limepepper.system.package_installer
+      vars:
+        package_list: "{{ telegraf_packages }}"

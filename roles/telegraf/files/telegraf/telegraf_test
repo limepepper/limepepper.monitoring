@@ -1,0 +1,15 @@
+#!/bin/bash
+
+set -eu -o pipefail
+
+if [ "$(id -u)" -eq 0 ]; then
+  # If the user is root, run the command as the telegraf user
+  sudo -u telegraf telegraf --config /etc/telegraf/telegraf.conf --test "$@"
+elif [ "$(id -un)" = "telegraf" ]; then
+  # If the user is telegraf, run the command directly
+  telegraf --config /etc/telegraf/telegraf.conf --test "$@"
+else
+  # Otherwise, report an error
+  echo "Error: This command must be called by telegraf or root" >&2
+  exit 1
+fi

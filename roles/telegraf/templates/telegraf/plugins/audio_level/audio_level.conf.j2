@@ -6,17 +6,8 @@
 
   timeout = "15s"
   data_format = "influx"
-  # name_suffix = "_smartctl"
-  name_override = "audio_level"
+  interval = "{{ telegraf_audio_level_interval }}"
 
-  {# json_name_key = "measurement"
-  json_time_key = "time"
-  json_time_format = "unix_ns"
-  json_query = "fields" #}
-
-  ## Custom tags to identify disks
   [inputs.exec.tags]
-  host = "{{ ansible_fqdn }}"
-  device = "audio"
-
-  interval = "30s"
+    device = "audio"
+    interval = "{{ telegraf_audio_level_interval }}"

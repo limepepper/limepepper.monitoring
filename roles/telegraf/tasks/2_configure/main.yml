@@ -1,4 +1,5 @@
 ---
+
 - name: Configure telegraf
   tags: telegraf-config
   block:
@@ -14,7 +15,21 @@
 
     - name: Configure plugins
       tags: always
-      ansible.builtin.include_tasks: "{{ role_path }}/tasks/2_configure/plugins/{{ telegraf_plugin_item.name | default(telegraf_plugin_item) }}.yml"
+      ansible.builtin.include_tasks:
+        file: "{{ role_path }}/tasks/2_configure/plugins/{{ telegraf_plugin_item.name | default(telegraf_plugin_item) }}.yml"
+        apply:
+          tags: telegraf-plugins
       loop: "{{ telegraf_plugins }}"
       loop_control:
         loop_var: telegraf_plugin_item
+
+    - name: Add telegraf test script
+      ansible.builtin.copy:
+        src: "{{ role_path }}/files/telegraf/{{ item }}"
+        dest: "/usr/local/bin/{{ item }}"
+        owner: root
+        group: root
+        mode: "0755"
+      loop:
+        - telegraf_test
+        - telegraf_once

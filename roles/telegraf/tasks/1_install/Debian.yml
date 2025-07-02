@@ -1,8 +1,0 @@
----
-- name: Install Telegraf on Debian
-  tags: telegraf-install
-  block:
-    - name: Install telegraf packages
-      ansible.builtin.package:
-        name:
-          - telegraf

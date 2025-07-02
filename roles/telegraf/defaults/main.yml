@@ -15,9 +15,11 @@ telegraf_interval: 60s
 telegraf_round_interval: "true"
 
 telegraf_plugins: []
+
 telegraf_packages:
-  - influxdb2-cli
+#  - influxdb2-cli
   - telegraf
+telegraf_repo_packages: []
 
 telegraf_mqtt_broker: localhost
 telegraf_mqtt_port: "1883"
@@ -26,7 +28,15 @@ telegraf_apcupsd_host: localhost
 telegraf_apcupsd_port: "3551"
 telegraf_apcupsd_timeout: 5s
 
+telegraf_audio_level_interval: 20s
 telegraf_audio_level_sample_trim: 1
 telegraf_audio_level_sample_rate: 48000
 telegraf_audio_level_sample_size: 16
 telegraf_audio_level_sample_channels: 1
+
+telegraf_conf_dir: /etc/telegraf
+telegraf_confd_dir: "{{ telegraf_conf_dir }}/telegraf.d"
+
+telegraf_sensors_packages: "{{ _telegraf_sensors_packages | default([]) }}"
+
+telegraf_zfs_interval: 600s

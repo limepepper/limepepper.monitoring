@@ -1,0 +1,9 @@
+# This file is managed by Ansible - do not edit manually
+
+{% for exe_syscall in auditd_rules_exe_syscalls %}
+-a always,exit -F arch=b64 {%
+    if 'exe' in exe_syscall and exe_syscall.exe %}-F exe={{ exe_syscall.exe }} {% endif %}{%
+    if 'comm' in exe_syscall and exe_syscall.comm %}-F comm={{ exe_syscall.comm }}{% endif %} -S {{ exe_syscall.syscalls | join(',') }} {%
+    if 'filter_keys' in exe_syscall and exe_syscall.filter_keys %}{{ exe_syscall.filter_keys | map('regex_replace', '^(.*)$', '-k \\1') | list | join(' ') }}{% else %} -k exe_syscalls{% endif %}
+
+{% endfor %}

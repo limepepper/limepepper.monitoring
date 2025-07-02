@@ -1,0 +1,14 @@
+---
+
+- name: Start auditd service
+  tags: auditd-service
+  block:
+    - name: Start auditd service
+      limepepper.system.service2:
+        name: "{{ auditd_service_name }}"
+        state: started
+        enabled: true
+      register: auditd_service_started
+      when:
+        - not ansible_check_mode
+        - auditd_service_start

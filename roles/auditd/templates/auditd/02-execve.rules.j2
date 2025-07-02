@@ -1,0 +1,8 @@
+# This file is managed by Ansible - do not edit manually
+
+{% for execve_file in auditd_rules_execve %}
+-a always,exit -F arch=b64 -F path={{ execve_file.path }} -F perm=x {%
+    if 'filter_keys' in execve_file and execve_file.filter_keys %}{{ execve_file.filter_keys | map('regex_replace', '^(.*)$', '-k \\1') | list | join(' ') }}{% else %} -k execution_bin_id{% endif %}
+-a always,exit -F arch=b64 -F exe={{ execve_file.path }} -S execve {%
+    if 'filter_keys' in execve_file and execve_file.filter_keys %}{{ execve_file.filter_keys | map('regex_replace', '^(.*)$', '-k \\1') | list | join(' ') }}{% else %} -k execution_bin_id{% endif %}
+{% endfor %}

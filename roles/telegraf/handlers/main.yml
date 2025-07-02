@@ -5,9 +5,30 @@
     # state: try-reload-or-restart
     state: restarted
     enabled: true
+  register: telegraf_service_restarted
   when: >
     not (
         telegraf_service_started is defined
       and
         telegraf_service_started.changed
+        )
+
+- name: Reload telegraf service
+  limepepper.system.service2:
+    name: telegraf
+    # state: try-reload-or-restart
+    state: reloaded
+    enabled: true
+  when:
+    - >
+      not (
+        telegraf_service_started is defined
+      and
+        telegraf_service_started.changed
+        )
+    - >
+      not (
+        telegraf_service_restarted is defined
+      and
+        telegraf_service_restarted.changed
         )

@@ -1,0 +1,19 @@
+---
+- name: Configure sensors plugin for telegraf
+  tags: [telegraf-plugin-sensors]
+  block:
+    - name: Install sensors package
+      ansible.builtin.package:
+        name: "{{ item }}"
+        state: present
+      loop: "{{ telegraf_sensors_packages }}"
+
+    - name: Install plugin config
+      ansible.builtin.template:
+        src: telegraf/plugins/sensors.conf.j2
+        dest: "{{ telegraf_confd_dir }}/sensors.conf"
+        owner: root
+        group: root
+        mode: "0644"
+      notify:
+        - Restart telegraf service

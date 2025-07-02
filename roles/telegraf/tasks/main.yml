@@ -25,6 +25,10 @@
           #                  |___/
           ## Running LimePepper Telegraf role
 
+    - name: Load distro specific vars
+      tags: always
+      ansible.builtin.include_tasks: vars.yml
+
     - name: Install telegraf package
       tags: always
       ansible.builtin.include_tasks: 1_install/main.yml

@@ -1,0 +1,8 @@
+---
+- name: Install auditd packages on Linux
+  tags: auditd-install
+  block:
+    - name: Install auditd packages
+      ansible.builtin.package:
+        name:
+          - auditd

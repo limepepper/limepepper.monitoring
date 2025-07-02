@@ -1,0 +1,40 @@
+---
+
+- name: Configure auditd
+  tags: auditd-config
+  block:
+    - name: Update the main config file
+      ansible.builtin.template:
+        src: "auditd/auditd.conf.j2"
+        dest: "/etc/audit/auditd.conf"
+        owner: root
+        group: root
+        mode: "0640"
+#      notify:
+#        - Reload auditd rules
+
+    - name: Update the main rules stub file
+      ansible.builtin.template:
+        src: "auditd/audit.rules.j2"
+        dest: "{{ auditd_rules_d_dir }}/audit.rules"
+        owner: root
+        group: root
+        mode: "0640"
+      notify:
+        - Reload auditd rules
+
+    - name: Install auditd rule for gnome-keyring-daemon
+      ansible.builtin.template:
+        src: "auditd/{{ rule_item }}.rules.j2"
+        dest: "{{ auditd_rules_d_dir }}/{{ rule_item }}.rules"
+        owner: root
+        group: root
+        mode: "0640"
+        trim_blocks: true
+        lstrip_blocks: true
+      when: rule_item
+      loop: "{{ auditd_rules_templates }}"
+      loop_control:
+        loop_var: rule_item
+      notify:
+        - Reload auditd rules

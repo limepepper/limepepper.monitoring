@@ -1,0 +1,13 @@
+---
+- name: Configure zfs input plugin for telegraf
+  tags: [telegraf-plugin-zfs]
+  block:
+    - name: Install plugin config
+      ansible.builtin.template:
+        src: telegraf/plugins/zfs.conf.j2
+        dest: "{{ telegraf_confd_dir }}/zfs.conf"
+        owner: root
+        group: root
+        mode: "0644"
+      notify:
+        - Restart telegraf service

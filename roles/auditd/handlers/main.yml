@@ -1,0 +1,21 @@
+---
+
+- name: Systemd daemon-reload
+  ansible.builtin.systemd:
+    daemon_reload: true
+
+- name: Reload auditd rules
+  ansible.builtin.command: augenrules --load
+
+- name: Restart auditd
+  limepepper.system.service2:
+    name: "{{ auditd_service_name }}"
+    state: restarted
+  when:
+    - not ansible_check_mode
+    - >
+      not (
+        auditd_service_started is defined
+      and
+        auditd_service_started.changed
+      )

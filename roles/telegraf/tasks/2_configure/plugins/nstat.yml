@@ -1,0 +1,13 @@
+---
+- name: Configure nstat input plugin for telegraf
+  tags: [telegraf-plugin-nstat]
+  block:
+    - name: Install plugin config
+      ansible.builtin.template:
+        src: telegraf/plugins/nstat.conf.j2
+        dest: "{{ telegraf_confd_dir }}/nstat.conf"
+        owner: root
+        group: root
+        mode: "0644"
+      notify:
+        - Restart telegraf service

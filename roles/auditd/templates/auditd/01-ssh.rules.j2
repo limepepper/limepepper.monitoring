@@ -1,0 +1,17 @@
+# Audit rules for ssh activities
+
+# Exclude SSH user login/logout events
+-a never,user -F msgtype=USER_LOGIN -F exe=/usr/libexec/openssh/sshd-session
+-a never,user -F msgtype=USER_LOGOUT -F exe=/usr/libexec/openssh/sshd-session
+-a never,user -F msgtype=USER_START -F exe=/usr/libexec/openssh/sshd-session
+-a never,user -F msgtype=USER_END -F exe=/usr/libexec/openssh/sshd-session
+
+# Exclude SSH crypto key operations
+-a never,user -F msgtype=CRYPTO_KEY_USER -F exe=/usr/libexec/openssh/sshd-session
+
+# Exclude SSH connection events
+-a never,user -F msgtype=USER_AUTH -F exe=/usr/libexec/openssh/sshd-session
+
+# exclude ALL SSH daemon activity (more aggressive):
+# -a never,exit -F exe=/usr/libexec/openssh/sshd-session
+# -a never,user -F exe=/usr/libexec/openssh/sshd-session

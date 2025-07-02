@@ -1,0 +1,45 @@
+---
+- name: Configure auditd rules
+  tags: auditd
+  block:
+    - name: Collect minimal facts if not already
+      tags: always
+      when: >
+        ansible_distribution is not defined or
+        ansible_default_ipv4 is not defined
+      ansible.builtin.setup:
+        gather_subset:
+          - min
+          - network
+
+    - name: Show information for this installation
+      ansible.builtin.debug:
+        msg: |2
+
+          ## installing auditd - ansible role
+          #                  _ _ _      _
+          #   __ _ _   _  __| (_) |_ __| |
+          #  / _` | | | |/ _` | | __/ _` |
+          # | (_| | |_| | (_| | | || (_| |
+          #  \__,_|\__,_|\__,_|_|\__\__,_|
+          #
+          ## Running LimePepper auditd role
+
+#    - name: Load distro specific vars
+#      tags: always
+#      ansible.builtin.include_tasks: vars.yml
+
+    - name: Installation tasks
+      tags: always
+      ansible.builtin.include_tasks: 1_install/main.yml
+
+    - name: Configurations tasks
+      tags: always
+      ansible.builtin.include_tasks: 2_configure/main.yml
+
+    - name: Service tasks
+      tags: always
+      ansible.builtin.include_tasks: 3_service/main.yml
+
+    - name: Flush handlers
+      ansible.builtin.meta: flush_handlers

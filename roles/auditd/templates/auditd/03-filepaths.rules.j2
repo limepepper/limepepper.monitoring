@@ -1,0 +1,5 @@
+# This file is managed by Ansible - do not edit manually
+
+{% for filepaths_file in auditd_rules_filepaths %}
+-a always,exit -F arch=b64 -F path={{ filepaths_file.path }} -F perm=wa -k ansible-filepaths
+{% endfor %}
