@@ -1,0 +1,28 @@
+---
+
+- name: Systemd daemon-reload
+  ansible.builtin.systemd:
+    daemon_reload: true
+
+- name: Restart dbus_m service # noqa: command-instead-of-module
+  ansible.builtin.command:
+    cmd: systemctl is-active "{{ dbus_m_service_name }}"
+  register: service_status
+  failed_when: service_status.rc not in [0, 3, 4]
+  changed_when: service_status.rc == 0
+
+- name: Actually restart dbus_m service
+  limepepper.system.service2:
+    name: "{{ dbus_m_service_name }}"
+    daemon_reload: true
+    state: restarted
+  listen: Restart dbus_m service
+  when:
+    - not ansible_check_mode
+    - service_status.stdout == 'active'
+    - >
+      not (
+        dbus_m_service_started is defined
+      and
+        dbus_m_service_started.changed
+      )

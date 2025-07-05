@@ -1,0 +1,13 @@
+# {{ dbus_m_service_path }}
+[Unit]
+Description={{ dbus_m_service_description }}
+After=multi-user.target
+
+[Service]
+Type={{ dbus_m_service_type }}
+ExecStart={{ dbus_m_script_path }}
+Restart=always
+User=fedora
+
+[Install]
+WantedBy=multi-user.target

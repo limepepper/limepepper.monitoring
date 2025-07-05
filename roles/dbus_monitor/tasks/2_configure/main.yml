@@ -1,0 +1,42 @@
+---
+- name: Configure the dbus_m system on Linux
+  tags: dbus-m-config
+  block:
+
+    - name: Configure policy for monitoring
+      ansible.builtin.template:
+        src: dbus_m/system-local.conf.j2
+        dest: /etc/dbus-1/system-local.conf
+        owner: root
+        group: root
+        mode: "0644"
+      register: dbus_m_config
+      notify:
+        - Restart dbus_m service
+
+    - name: Create a script for the service
+      ansible.builtin.template:
+        src: dbus_m/dbus-m.j2
+        dest: "{{ dbus_m_script_path }}"
+        owner: root
+        group: root
+        mode: "0755"
+        trim_blocks: true
+        lstrip_blocks: true
+      notify:
+        - Restart dbus_m service
+
+    - name: Install service to respond to events
+      ansible.builtin.template:
+        src: dbus_m/dbus-m.service.j2
+        dest: "{{ dbus_m_service_path }}"
+        owner: root
+        group: root
+        mode: "0644"
+      register: dbus_m_service_unit
+      notify:
+        - Systemd daemon-reload
+
+    - name: Flush handlers
+      when: dbus_m_service_unit.changed # noqa: no-handler
+      ansible.builtin.meta: flush_handlers

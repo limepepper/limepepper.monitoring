@@ -1,0 +1,11 @@
+---
+- name: Install dbus_m on linux
+  tags: dbus-m-install-linux
+  block:
+    - name: Setup any 3rd party repos for dbus_m
+      ansible.builtin.package:
+        name: "{{ dbus_m_repo_packages }}"
+
+    - name: General packages for dbus_m
+      ansible.builtin.package:
+        name: "{{ dbus_m_packages }}"

@@ -1,0 +1,27 @@
+---
+
+dbus_m_repo_packages: []
+
+dbus_m_packages:
+  - dbus-tools
+
+dbus_m_service_name: dbus-m
+dbus_m_service_description: "Dbus Monitor service"
+dbus_m_service_type: simple
+dbus_m_service_enable: true
+dbus_m_service_path: "/etc/systemd/system/{{ dbus_m_service_name }}.service"
+dbus_m_script_path: /usr/bin/dbus-m
+
+dbus_m_monitor_address: unix:path=/run/user/1000/bus
+
+# example config for dbus_m_filters
+#dbus_m_filters:
+#  - - key: destination
+#      value: org.freedesktop.secrets
+#  - - key: sender
+#      value: org.freedesktop.secrets
+#  - - key: interface
+#      value: org.freedesktop.portal.Secret
+#  - - key: arg0
+#      value: org.freedesktop.secrets
+dbus_m_filters: []

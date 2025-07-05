@@ -1,0 +1,15 @@
+---
+
+- name: Start any services for dbus-m
+  tags: dbus-m-service-linux
+  block:
+    - name: Start the dbus_m service
+      limepepper.system.service2:
+        name: "{{ dbus_m_service_name }}"
+        daemon_reload: true
+        state: started
+        enabled: true
+      register: dbus_m_service_started
+      when:
+        - not ansible_check_mode
+        - dbus_m_service_enable

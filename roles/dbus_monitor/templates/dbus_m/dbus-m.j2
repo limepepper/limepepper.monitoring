@@ -1,0 +1,6 @@
+#!/bin/bash
+
+set -eu -o pipefail
+
+exec dbus-monitor --address {{ dbus_m_monitor_address }} \
+    {% if dbus_m_filters %}{% for filter in dbus_m_filters %}"{% for pattern in filter %}{{ pattern["key"] }}='{{ pattern.value }}'{% if not loop.last %},{% endif %}{% endfor -%}" {% endfor %}{% endif -%} > ${HOME}/.local/log/dbus.log
