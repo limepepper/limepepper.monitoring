@@ -14,7 +14,6 @@
 - name: Actually restart dbus_m service
   limepepper.system.service2:
     name: "{{ dbus_m_service_name }}"
-    daemon_reload: true
     state: restarted
   listen: Restart dbus_m service
   when:
