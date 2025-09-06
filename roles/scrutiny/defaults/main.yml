@@ -1,0 +1,15 @@
+---
+
+scrutiny_service_name: scrutiny
+scrutiny_collector_bin: scrutiny-collector
+scrutiny_server_hostname: localhost
+scrutiny_host_id: localhost
+
+scrutiny_packages: "{{ _scrutiny_packages }}"
+_scrutiny_packages: []
+
+scrutiny_repo_packages: "{{ _scrutiny_repo_packages }}"
+_scrutiny_repo_packages: []
+
+scrutiny_version: 0.8.1
+scrutiny_bin_url: "https://github.com/AnalogJ/scrutiny/releases/download/v{{ scrutiny_version }}/scrutiny-collector-metrics-linux-amd64"

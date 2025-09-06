@@ -1,0 +1,7 @@
+---
+
+# Use this task file to assert that the role is being used correctly
+# Typically this is only used if there is some precondition that it would
+# be dangerous to run the role without. Usually its fine just to
+# let ansible fail if something is missing, but this
+# is a good place to put a warning or error message.

@@ -1,0 +1,16 @@
+---
+
+- name: Load distro vars (accumulatively)
+  ansible.builtin.include_vars: "{{ distro_specific_vars }}"
+  tags: always
+  with_items:
+    - "default.yml"
+    - "{{ ansible_system }}.yml"
+    - "{{ ansible_os_family }}.yml"
+    - "{{ ansible_distribution }}.yml"
+    - "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml"
+    - "{{ ansible_distribution }}-{{ ansible_distribution_release }}.yml"
+    - "{{ ansible_distribution }}-{{ ansible_distribution_version }}.yml"
+  when: (role_path + '/vars/' + distro_specific_vars) is file
+  loop_control:
+    loop_var: distro_specific_vars

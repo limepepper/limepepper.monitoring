@@ -1,0 +1,28 @@
+---
+- name: Install and configuration scrutiny
+  tags: scrutiny
+  block:
+    - name: Collect only minimal facts
+      tags: always
+      when: >
+        ansible_distribution is not defined or
+        ansible_default_ipv4 is not defined
+      ansible.builtin.setup:
+        gather_subset:
+          - min
+          - network
+
+    - name: Install scrutiny
+      tags: always
+      ansible.builtin.include_tasks: 1_install/main.yml
+
+    - name: Configure scrutiny
+      tags: always
+      ansible.builtin.include_tasks: 2_configure/main.yml
+
+#    - name: Start scrutiny service
+#      tags: always
+#      ansible.builtin.include_tasks: 3_service/main.yml
+
+    - name: Flush handlers
+      ansible.builtin.meta: flush_handlers

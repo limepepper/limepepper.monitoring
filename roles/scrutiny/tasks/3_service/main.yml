@@ -1,0 +1,14 @@
+---
+
+- name: Configure service scrutiny for Linux
+  tags: scrutiny-service-linux
+  block:
+    - name: Start scrutiny service
+      limepepper.system.service2:
+        name: "{{ scrutiny_service_name }}"
+        state: started
+        enabled: true
+      register: scrutiny_service_started
+      when:
+        - not ansible_check_mode
+        - scrutiny_service_start

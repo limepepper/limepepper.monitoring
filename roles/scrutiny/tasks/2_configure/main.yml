@@ -1,0 +1,29 @@
+---
+- name: Configure scrutiny on Linux
+  tags: scrutiny-config-linux
+  block:
+    - name: Install scrutiny main config
+      ansible.builtin.template:
+        src: scrutiny/config/scrutiny.yaml.j2
+        dest: /opt/scrutiny/config/scrutiny.yaml
+        owner: root
+        group: root
+        mode: "0644"
+#      notify:
+#        - restart scrutiny service
+
+#    - name: Service override for scrutiny
+#      ansible.builtin.template:
+#        src: scrutiny/systemd/override.service.conf.j2
+#        dest: "{{ scrutiny_systemd_override_dir }}/override.conf"
+#        owner: root
+#        group: root
+#        mode: "0644"
+#      register: scrutiny_service_unit_override
+#      notify:
+#        - Systemd daemon-reload
+#        - Restart scrutiny
+
+#    - name: Flush handlers
+#      when: scrutiny_service_unit_override.changed # noqa: no-handler
+#      ansible.builtin.meta: flush_handlers

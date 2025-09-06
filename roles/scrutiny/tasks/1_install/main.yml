@@ -1,0 +1,39 @@
+---
+
+- name: Install scrutiny on Linux
+  tags: scrutiny-install-linux
+  block:
+    - name: Install scrutiny repo packages using proxy if available
+      ansible.builtin.include_role:
+        name: limepepper.system.package_installer
+      when: scrutiny_repo_packages
+      vars:
+        package_list: "{{ scrutiny_repo_packages }}"
+
+    - name: Install scrutiny packages using proxy if available
+      ansible.builtin.include_role:
+        name: limepepper.system.package_installer
+      when: scrutiny_packages
+      vars:
+        package_list: "{{ scrutiny_packages }}"
+
+    - name: Create src dir for service
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+      loop:
+        - "/opt/{{ scrutiny_service_name }}"
+        - "/opt/{{ scrutiny_service_name }}/bin"
+        - "/opt/{{ scrutiny_service_name }}/config"
+
+    - name: Install scrutiny bin
+      ansible.builtin.get_url:
+        url: "{{ scrutiny_bin_url }}"
+        dest: "/opt/{{ scrutiny_service_name }}/bin/{{ scrutiny_collector_bin }}"
+        owner: root
+        group: root
+        mode: "0755"
+      when: scrutiny_bin_url is defined

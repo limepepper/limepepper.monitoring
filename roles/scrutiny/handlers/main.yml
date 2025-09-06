@@ -1,0 +1,35 @@
+---
+
+- name: Systemd daemon-reload
+  ansible.builtin.systemd:
+    daemon_reload: true
+
+- name: Restart scrutiny # noqa: command-instead-of-module
+  ansible.builtin.command:
+    cmd: systemctl is-active "{{ scrutiny_service_name }}"
+  register: service_status
+  failed_when: service_status.rc not in [0, 3, 4]
+  changed_when: service_status.rc == 0
+
+- name: Actually Restart scrutiny if scrutiny is running
+  limepepper.system.service2:
+    name: "{{ scrutiny_service_name }}"
+    state: restarted
+  listen: Restart scrutiny
+  when:
+    - not ansible_check_mode
+    - service_status.stdout == 'active'
+    - >
+      not (
+        scrutiny_service_started is defined
+      and
+        scrutiny_service_started.changed
+      )
+
+- name: Wait for scrutiny port to be open
+  listen: Restart scrutiny
+  ansible.builtin.wait_for:
+    port: "{{ scrutiny_port }}"
+  when:
+    - scrutiny_pause_after_restart is defined
+    - scrutiny_pause_after_restart
